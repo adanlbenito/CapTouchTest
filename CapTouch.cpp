@@ -25,6 +25,8 @@ int CapTouch::setup(int i2c_bus, int i2c_address) {
 		return 3;
 	}
 
+	usleep(5000); // need to give enough time to process command
+
 	isReady = true;
 	return 0;
 }
@@ -65,8 +67,20 @@ int CapTouch::setMode(uint8_t mode) {
 	return 0;
 }	
 
+int CapTouch::updateBaseLine() {
+	char buf[3] = { kOffsetCommand, kCommandBaselineUpdate };
+	if(int writtenValue = (::write(i2C_file, buf, 2)) !=2) 
+	{
+		fprintf(stderr, "Failed to set CapTouch's baseline.\n");
+		fprintf(stderr, "%d\n", writtenValue);
+		return 1;
+	}
+
+	return 0;
+}	
+
 int CapTouch::prepareForDataRead() {
-	char buf[0];
+	char buf[1] = { kOffsetData };
 	if(write(i2C_file, buf, 1) != 1)
 	{
 		fprintf(stderr, "Failed to prepare CapTouch data collection\n");
@@ -77,16 +91,16 @@ int CapTouch::prepareForDataRead() {
 }
 
 int CapTouch::readI2C() {
-	//prepareForDataRead();
+
 	int bytesRead = read(i2C_file, dataBuffer, kRawLength);
 	if (bytesRead != kRawLength)
 	{
 		fprintf(stderr, "Failure to read Byte Stream\n");
 		return 1;
 	}
-
 	for (unsigned int i=0; i < numSensors; i++) {
-		rawData[i] = ((dataBuffer[kOffsetData+2*i] << 8) + dataBuffer[kOffsetData+2*i+1]) & 0x0FFF;
+		rawData[i] = ((dataBuffer[2*i] << 8) + dataBuffer[2*i+1]) & 0x0FFF;
+
 	}
 	
 	return 0;

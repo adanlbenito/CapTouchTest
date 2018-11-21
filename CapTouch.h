@@ -23,7 +23,7 @@ class CapTouch : public I2c
 		
 		enum {
 			kNormalLengthDefault = 20,
-			kRawLength = 52
+			kRawLength = 60
 		};
 		
 		bool isReady;
@@ -52,6 +52,7 @@ class CapTouch : public I2c
 		
 		bool ready(){ return isReady; }
 		int setMode(uint8_t mode);
+		int updateBaseLine();
 		int prepareforDataRead();
 		int readI2C();
 		int identify();
