@@ -67,6 +67,56 @@ int CapTouch::setMode(uint8_t mode) {
 	return 0;
 }	
 
+int CapTouch::setScanSettings(uint8_t speed, uint8_t num_bits) {
+	char buf[4] = { kOffsetCommand, kCommandMode, speed, num_bits };
+	if(int writtenValue = (::write(i2C_file, buf, 4)) !=4) 
+	{
+		fprintf(stderr, "Failed to set CapTouch's scan settings.\n");
+		fprintf(stderr, "%d\n", writtenValue);
+		return 1;
+	}
+
+	return 0;
+}	
+
+
+int CapTouch::setPrescaler(uint8_t prescaler) {
+	char buf[3] = { kOffsetCommand, kCommandMode, prescaler };
+	if(int writtenValue = (::write(i2C_file, buf, 3)) !=3) 
+	{
+		fprintf(stderr, "Failed to set CapTouch's prescaler.\n");
+		fprintf(stderr, "%d\n", writtenValue);
+		return 1;
+	}
+
+	return 0;
+}	
+
+int CapTouch::setNoiseThreshold(uint8_t threshold) {
+	char buf[3] = { kOffsetCommand, kCommandMode, threshold};
+	if(int writtenValue = (::write(i2C_file, buf, 3)) !=3) 
+	{
+		fprintf(stderr, "Failed to set CapTouch's threshold.\n");
+		fprintf(stderr, "%d\n", writtenValue);
+		return 1;
+	}
+
+	return 0;
+}	
+
+
+int CapTouch::setIDACValue(uint8_t value) {
+	char buf[3] = { kOffsetCommand, kCommandMode, value};
+	if(int writtenValue = (::write(i2C_file, buf, 3)) !=3) 
+	{
+		fprintf(stderr, "Failed to set CapTouch's IDAC value.\n");
+		fprintf(stderr, "%d\n", writtenValue);
+		return 1;
+	}
+
+	return 0;
+}	
+
 int CapTouch::updateBaseLine() {
 	char buf[3] = { kOffsetCommand, kCommandBaselineUpdate };
 	if(int writtenValue = (::write(i2C_file, buf, 2)) !=2) 
