@@ -18,7 +18,8 @@ class CapTouch : public I2c
 
 		enum {
 			kOffsetCommand = 0,
-			kOffsetData = 4
+			kOffsetData = 4,
+			kSleepTime = 5000
 		};
 		
 		enum {

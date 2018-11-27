@@ -12,20 +12,28 @@ int CapTouch::setup(int i2c_bus, int i2c_address) {
 		return 1;
 	}
 	
-	usleep(5000); // need to give enough time to process command
+	usleep(kSleepTime); // need to give enough time to process command
 
 	if(setMode(DIFF) != 0) {
 		fprintf(stderr, "Unable to set mode\n");
 		return 2;
 	}
 	
-	usleep(5000); // need to give enough time to process command
+	usleep(kSleepTime); // need to give enough time to process command
 	
+	if(updateBaseLine() != 0) {
+		fprintf(stderr, "Unable to update baseline\n");
+		return 4;
+	}
+
+	usleep(kSleepTime); // need to give enough time to process command
+
 	if(prepareForDataRead() != 0) {
+		fprintf(stderr, "Unable to prepare for reading data\n");
 		return 3;
 	}
 
-	usleep(5000); // need to give enough time to process command
+	usleep(kSleepTime); // need to give enough time to process command
 
 	isReady = true;
 	return 0;
@@ -118,7 +126,7 @@ int CapTouch::setIDACValue(uint8_t value) {
 }	
 
 int CapTouch::updateBaseLine() {
-	char buf[3] = { kOffsetCommand, kCommandBaselineUpdate };
+	char buf[2] = { kOffsetCommand, kCommandBaselineUpdate };
 	if(int writtenValue = (::write(i2C_file, buf, 2)) !=2) 
 	{
 		fprintf(stderr, "Failed to set CapTouch's baseline.\n");
