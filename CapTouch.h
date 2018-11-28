@@ -18,8 +18,7 @@ class CapTouch : public I2c
 
 		enum {
 			kOffsetCommand = 0,
-			kOffsetData = 4,
-			kSleepTime = 5000
+			kOffsetData = 4
 		};
 		
 		enum {
@@ -32,7 +31,7 @@ class CapTouch : public I2c
 		uint8_t firmware_version_; // Firmware version running on the device
 
 		uint8_t dataBuffer[kRawLength];
-		int prepareForDataRead();
+		uint16_t commandSleepTime = 5000;;
 
 	public:
 		static unsigned int constexpr numSensors = 26;
@@ -55,17 +54,16 @@ class CapTouch : public I2c
 
 		/* Update the baseline value on the sensor*/
 		int updateBaseLine();
-		int prepareforDataRead();
+		int prepareForDataRead();
 		int readI2C();
 		/* Return the type of the device attached or 0 if none is attached */
 		int identify();
 		
 		/* --- Scan configuratin settings --- */
 		int setMode(uint8_t mode);
-		int setScanSettings(uint8_t speed, uint8_t num_bits);
+		int setScanSettings(uint8_t speed, uint8_t num_bits = 12);
 		int setPrescaler(uint8_t prescaler);
 		int setNoiseThreshold(uint8_t threshold);
 		int setIDACValue(uint8_t value);
-
 		
 };
