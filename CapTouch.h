@@ -31,7 +31,7 @@ class CapTouch : public I2c
 		uint8_t firmware_version_; // Firmware version running on the device
 
 		uint8_t dataBuffer[kRawLength];
-		uint16_t commandSleepTime = 5000;;
+		uint16_t commandSleepTime = 10000;;
 
 	public:
 		static unsigned int constexpr numSensors = 26;
