@@ -1,7 +1,7 @@
 #include <Bela.h>
-#include <CapTouch.h>
+#include <Trill.h>
 
-CapTouch touchSensor;
+Trill touchSensor;
 
 int speedOpts[4] = {0, 1, 2, 3};
 int prescalerOpts[6] = {1, 2, 4, 8, 16, 32};
@@ -55,6 +55,7 @@ bool setup(BelaContext *context, void *userData)
 
 	if(touchSensor.prepareForDataRead() != 0)
 		return false;
+
 	Bela_scheduleAuxiliaryTask(Bela_createAuxiliaryTask(loop, 50, "I2C-read", NULL));
 	return true;
 }
